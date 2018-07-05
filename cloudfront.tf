@@ -9,6 +9,8 @@ data "aws_acm_certificate" "selected" {
 }
 
 resource "aws_cloudfront_distribution" "site" {
+    depends_on  = ["aws_s3_bucket.bucket"]
+
     enabled             = true
     aliases             = ["${var.aliases}"]
     price_class         = "PriceClass_All"
@@ -36,7 +38,7 @@ resource "aws_cloudfront_distribution" "site" {
 
     tags {
         project   = "${var.project}"
-        stack     = "${var.stage}"
+        stage     = "${var.stage}"
     }
 
     restrictions {

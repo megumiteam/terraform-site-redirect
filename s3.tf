@@ -1,18 +1,27 @@
-data "aws_iam_policy_document" "s3_policy" {
-    statement {
-        actions   = ["s3:GetObject"]
-        resources = ["arn:aws:s3:::${var.bucket_name}/*"]
-    }
-
-    statement {
-        actions   = ["s3:ListBucket"]
-        resources = ["arn:aws:s3:::${var.bucket_name}"]
-    }
-}
-
 resource "aws_s3_bucket" "bucket" {
     bucket = "${var.bucket_name}"
-    policy = "${data.aws_iam_policy_document.s3_policy.json}"
+    acl    = "public-read"
+    policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::${var.bucket_name}/*"
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::${var.bucket_name}"
+        }
+    ]
+}
+POLICY
 
     website {
         redirect_all_requests_to = "${var.s3_redirect_to}"
@@ -21,6 +30,6 @@ resource "aws_s3_bucket" "bucket" {
     tags {
         Name      = "${var.bucket_name}"
         project   = "${var.project}"
-        stack     = "${var.stage}"
+        stage     = "${var.stage}"
     }
 }

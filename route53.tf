@@ -4,6 +4,11 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_route53_record" "A" {
+    depends_on  = [
+        "aws_s3_bucket.bucket",
+        "aws_cloudfront_distribution.site"
+    ]
+
     count   = "${length(var.aliases)}"
     zone_id = "${data.aws_route53_zone.selected.id}"
     name    = "${element(var.aliases,count.index)}"
@@ -16,6 +21,11 @@ resource "aws_route53_record" "A" {
 }
 
 resource "aws_route53_record" "AAAA" {
+    depends_on  = [
+        "aws_s3_bucket.bucket",
+        "aws_cloudfront_distribution.site"
+    ]
+
     count   = "${length(var.aliases)}"
     zone_id = "${data.aws_route53_zone.selected.id}"
     name    = "${element(var.aliases,count.index)}"
