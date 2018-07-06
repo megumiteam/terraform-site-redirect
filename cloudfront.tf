@@ -1,5 +1,5 @@
 locals {
-    origin_id-media = "S3-${var.bucket_name}"
+    origin_id-s3 = "S3-${var.bucket_name}"
 }
 
 data "aws_acm_certificate" "selected" {
@@ -19,7 +19,7 @@ resource "aws_cloudfront_distribution" "site" {
 
     origin {
         domain_name = "${aws_s3_bucket.bucket.id}.${aws_s3_bucket.bucket.website_domain}"
-        origin_id   = "${local.origin_id-media}"
+        origin_id   = "${local.origin_id-s3}"
         custom_origin_config {
             http_port              = 80
             https_port             = 443
@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "site" {
     }
 
     default_cache_behavior {
-        target_origin_id          = "${local.origin_id-media}"
+        target_origin_id          = "${local.origin_id-s3}"
         allowed_methods           = ["GET", "HEAD"]
         cached_methods            = ["GET", "HEAD"]
         forwarded_values {
