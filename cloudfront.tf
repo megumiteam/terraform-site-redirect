@@ -1,5 +1,5 @@
 locals {
-    origin_id-media = "${var.project}-${var.stage}-S3"
+    origin_id-media = "S3-${var.bucket_name}"
 }
 
 data "aws_acm_certificate" "selected" {
@@ -25,20 +25,15 @@ resource "aws_cloudfront_distribution" "site" {
             https_port             = 443
             origin_protocol_policy = "http-only"
             origin_ssl_protocols   = ["TLSv1","TLSv1.1","TLSv1.2"]
-            origin_read_timeout    = 60
+            origin_read_timeout    = 30
         }
     }
 
     viewer_certificate {
         acm_certificate_arn      = "${data.aws_acm_certificate.selected.arn}"
         ssl_support_method       = "sni-only"
-        minimum_protocol_version = "TLSv1"
+        minimum_protocol_version = "${var.minimum_protocol}"
         cloudfront_default_certificate = false
-    }
-
-    tags {
-        project   = "${var.project}"
-        stage     = "${var.stage}"
     }
 
     restrictions {

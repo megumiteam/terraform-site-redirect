@@ -29,7 +29,5 @@ POLICY
 
     tags {
         Name      = "${var.bucket_name}"
-        project   = "${var.project}"
-        stage     = "${var.stage}"
     }
 }
