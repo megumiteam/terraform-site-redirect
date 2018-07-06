@@ -9,7 +9,7 @@
 
 このテンプレートでは、Route53 へのレコード登録は行いますが Hosted Zone の登録は行いません。
 
-# variable について
+# variable について
 
 `www.example.com` を `https://example.com` にリダイレクトさせるには `terraform.tfvars` で設定するには、以下の感じで
 
