@@ -1,17 +1,19 @@
-# これは何？
-閉鎖したサイトや、www 有りを無しにリダイレクトさせるなど単純にドメインのリダイレクトをしたいんだけど、サーバを建てたくは無いなというときに使います。
-リダイレクト処理はS3ホスティングで行い、SSL証明書はCloudFrontに設置されたACMで管理するので一度作れば管理する必要がありません。
+# What is it?
 
-# 前提条件
+This Terraform template is for domain redirection without creating a server. It enabled you to create a redirection from archived site to live one or www-prefixed domain to naked domain (root domain). The redirect processes on Amazon S3 hosting, and SSL digital certificate is on CloudFront and managed with ACM which also releases you from yearly SSL updates works.
+ 
 
-このテンプレートではACMの取得は行いません。
-事前に us-east-1 にて ACM で SSL証明書を取得しておいてください。
+# Requirements
 
-このテンプレートでは、Route53 へのレコード登録は行いますが Hosted Zone の登録は行いません。
+Get SSL digital certificate with ACM on us-east-1 region. 
+This template never gets any SSL digital certificate or ACM.
+Create or register Hosted Zone of your domain to Route53.
+This template will add DNS records to Route53, but never create or register a domain to Hosted Zone on Route53.
+ 
 
-# variable について
+# Example
 
-`www.example.com` を `https://example.com` にリダイレクトさせるには `terraform.tfvars` で設定するには、以下の感じで
+Create `terraform.tfvars` to make redirection to `https://example.com` from `http://www.example.com`: 
 
 ```
 "domain_name"    = "example.com"
@@ -21,4 +23,4 @@
     "www.example.com"
 ]
 "s3_redirect_to" = "https://example.com"
-```
+​```
